@@ -2,9 +2,10 @@ import { pipeTo } from "serverless-api-boilerplate";
 import { ITag, ITagGroup, NewTagGroup } from "../../common-shared/tag/types";
 import { database } from "../../core/database";
 import { HandlerArgs } from "../../core/express/types";
-import { getBody, getParam } from "../../core/express/util";
+import { getBody, getParam, getParams } from "../../core/express/util";
 import { CheckPermissions } from "../../uac/permission/util";
 import { TagGroup, Tag} from "./service";
+import { Query } from "../../core-shared/express/types";
 
 const db = database();
 
@@ -30,8 +31,8 @@ class TagHandlerClass {
     }
 
     @CheckPermissions("tag.view")
-    public getTags (...args:HandlerArgs<undefined>):Promise<ITag[]> {
-        return Tag.search();
+    public getTags (...args:HandlerArgs<Query>):Promise<ITag[]> {
+        return Tag.search({groupId: getParam<string>("groupId")(args)});
     }
 
     @CheckPermissions("tag.create")
@@ -39,9 +40,14 @@ class TagHandlerClass {
         return Tag.create(getBody(args));
     }
 
+    @CheckPermissions("tag.update")
+    public updateTag (...args:HandlerArgs<Partial<ITag>>):Promise<ITag> {
+        return pipeTo(Tag.update, getParam("tagId"), getBody)(args);
+    }
+
     @CheckPermissions("tag.delete")
     public removeTag (...args:HandlerArgs<undefined>):Promise<null> {
-        return pipeTo(Tag.remove, getParam("groupId"), getParam("tagId"))(args);
+        return pipeTo(Tag.remove, getParam("tagId"))(args);
     }
 };
 

@@ -12,6 +12,7 @@ export const TagEndpoints = {
                 GET: get(TagHandlers.getTags),
                 POST: post(TagHandlers.addTag),
                 ":tagId": {
+                    PATCH: patch(TagHandlers.updateTag),
                     DELETE: del(TagHandlers.removeTag),
                 }
             },

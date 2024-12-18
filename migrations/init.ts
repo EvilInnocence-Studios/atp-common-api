@@ -18,8 +18,8 @@ export const init:IMigration = {
             .createTable("tag", (table) => {
                 table.increments("id").primary();
                 table.string("name").notNullable();
-                table.integer("tagGroupId").notNullable();
-                table.foreign("tagGroupId").references("tagGroup.id");
+                table.integer("groupId").notNullable();
+                table.foreign("groupId").references("tagGroup.id");
             });
     }
 }
