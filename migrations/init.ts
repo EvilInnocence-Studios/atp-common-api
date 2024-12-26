@@ -1,3 +1,4 @@
+import { flatten } from "ts-functional";
 import { Index } from "ts-functional/dist/types";
 import { database } from "../../core/database";
 import { IMigration } from "../../core/database.d";
@@ -12,9 +13,15 @@ const tagGroups:Index<string[]> = {
     "Programs" : ["Poser",     "DAZ Studio", "CrossDresser 2", "CrossDresser 3", "CrossDresser 4"],
 };
 
+const synonyms:Index<string[]> = {
+    "Vicky 4": ["V4", "Victoria 4"],
+    "Mike 4": ["M4", "Michael 4"],
+}
+
 export const init:IMigration = {
     down: () => {
         return db.schema
+            .dropTableIfExists("synonyms")
             .dropTableIfExists("tags")
             .dropTableIfExists("tagGroups");
     },
@@ -30,6 +37,11 @@ export const init:IMigration = {
                 table.integer("groupId").notNullable();
                 table.foreign("groupId").references("tagGroups.id");
             })
+            .createTable("synonyms", (table) => {
+                table.increments("id").primary();
+                table.string("canonical").notNullable();
+                table.string("synonym").notNullable();
+            })
             .then(() => db("tagGroups")
                 .insert(Object.keys(tagGroups).map((name) => ({ name })), "*")
                 .then((groups) => db("tags")
@@ -38,6 +50,12 @@ export const init:IMigration = {
                         ...tagGroups[group.name].map((tagName) => ({ name: tagName, groupId: group.id }))
                     ], []))
                 )
-            );
+            )
+            .then(() => db("synonyms")
+                .insert(flatten(Object.keys(synonyms).map(
+                    canonical => synonyms[canonical].map(
+                        synonym => ({canonical, synonym})
+                    )
+                ))));
     }
 }
