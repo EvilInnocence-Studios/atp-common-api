@@ -31,6 +31,11 @@ class TagHandlerClass {
     }
 
     @CheckPermissions("tag.view")
+    public getAllTags (...args:HandlerArgs<Query>):Promise<ITag[]> {
+        return Tag.search();
+    }
+
+    @CheckPermissions("tag.view")
     public getTags (...args:HandlerArgs<Query>):Promise<ITag[]> {
         return Tag.search({groupId: getParam<string>("groupId")(args)});
     }

@@ -18,4 +18,7 @@ export const TagEndpoints = {
             },
         }
     },
+    tag: {
+        GET: get(TagHandlers.getAllTags),
+    }
 }
