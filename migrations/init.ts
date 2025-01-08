@@ -85,6 +85,7 @@ const synonyms:Index<string[]> = {
 export const init:IMigration = {
     down: () => {
         return db.schema
+            .dropTableIfExists("banners")
             .dropTableIfExists("synonyms")
             .dropTableIfExists("tags")
             .dropTableIfExists("tagGroups");
@@ -104,6 +105,16 @@ export const init:IMigration = {
             table.increments("id").primary();
             table.string("canonical").notNullable();
             table.string("synonym").notNullable();
+        })
+        .createTable("banners", (table) => {
+            table.increments("id").primary();
+            table.string("tag").notNullable();
+            table.string("name").notNullable();
+            table.string("title").notNullable();
+            table.string("description").notNullable();
+            table.string("url").notNullable().unique();
+            table.string("buttonText");
+            table.string("buttonLocation");
         }),
     priority: 0,
     initData: () => db("tagGroups")
