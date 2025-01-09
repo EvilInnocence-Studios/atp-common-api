@@ -1,20 +1,29 @@
 import { IBanner } from "../../common-shared/banner/types";
 import { database } from "../../core/database";
 import { basicCrudService } from "../../core/express/service/common";
+import { error409, error500 } from "../../core/express/util";
 import { downloadMedia, removeMedia, uploadMedia } from "../../core/s3Uploads";
 
 const db = database();
 
 export const Banner = {
     ...basicCrudService<IBanner>("banners"),
-    upload: async (file:Express.Multer.File):Promise<IBanner> => {
+    upload: async (file:File):Promise<IBanner> => {
+        console.log(file);
         // Upload file to S3
-        uploadMedia(`media/banner`, file, {failOnExist: true});
+        try {
+            await uploadMedia(`media/banner`, file, {failOnExist: true});
+        } catch(e) {
+            console.log(e);
+            throw error409("File already exists");
+        }
 
         // Create record in database
         // If url unique key already exists, just return the existing record instead
+        const mediaToInsert = { url: file.name, name: file.name };
+        console.log(mediaToInsert);
         const [newMedia] = await db("banners")
-            .insert({ url: file.filename, name: file.filename }, "*")
+            .insert(mediaToInsert, "*")
             .onConflict(["url"]).ignore();
 
         return newMedia;

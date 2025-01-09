@@ -2,7 +2,7 @@ import { pipeTo } from "serverless-api-boilerplate";
 import { IBanner } from "../../common-shared/banner/types";
 import { database } from "../../core/database";
 import { HandlerArgs } from "../../core/express/types";
-import { getBody, getParam } from "../../core/express/util";
+import { getBody, getFile, getParam } from "../../core/express/util";
 import { CheckPermissions } from "../../uac/permission/util";
 import { Banner } from "./service";
 
@@ -10,13 +10,13 @@ const db = database();
 
 class BannerHandlerClass {
     @CheckPermissions("banner.create")
-    public create (...args:HandlerArgs<IBanner>):Promise<IBanner> {
-        return Banner.upload(getBody(args));
+    public create (...args:HandlerArgs<Partial<any>>):Promise<IBanner> {
+        return pipeTo(Banner.upload, getFile)(args);
     }
 
     @CheckPermissions("banner.view")
     public search (...args:HandlerArgs<undefined>):Promise<IBanner[]> {
-        return Banner.search();
+        return pipeTo(Banner.search, getBody)(args);
     }
 
     @CheckPermissions("banner.view")

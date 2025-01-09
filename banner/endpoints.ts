@@ -1,10 +1,10 @@
-import { del, get, patch, post } from "../../core/express/wrappers";
+import { del, get, patch, upload } from "../../core/express/wrappers";
 import { BannerHandlers } from "./handlers";
 
 export const BannerEndpoints = {
     banner: {
         GET: get(BannerHandlers.search),
-        POST: post(BannerHandlers.create),
+        POST: upload(BannerHandlers.create),
         ":bannerId": {
             GET: get(BannerHandlers.get),
             PATCH: patch(BannerHandlers.update),

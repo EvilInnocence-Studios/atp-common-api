@@ -108,11 +108,14 @@ export const init:IMigration = {
         })
         .createTable("banners", (table) => {
             table.increments("id").primary();
-            table.string("tag").notNullable();
-            table.string("name").notNullable();
-            table.string("title").notNullable();
-            table.string("description").notNullable();
+            table.string("tag");
+            table.string("name");
+            table.string("title");
+            table.string("description");
             table.string("url").notNullable().unique();
+            table.string("link");
+            table.date("activeFrom");
+            table.date("activeTo");
             table.string("buttonText");
             table.string("buttonLocation");
         }),
