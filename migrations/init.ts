@@ -118,6 +118,8 @@ export const init:IMigration = {
             table.date("activeTo");
             table.string("buttonText");
             table.string("buttonLocation");
+            table.string("buttonTextAlt");
+            table.string("buttonLocationAlt");
         }),
     priority: 0,
     initData: () => db("tagGroups")
