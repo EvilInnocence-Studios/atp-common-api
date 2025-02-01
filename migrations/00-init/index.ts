@@ -1,7 +1,7 @@
 import { flatten } from "ts-functional";
 import { Index } from "ts-functional/dist/types";
-import { database } from "../../core/database";
-import { IMigration } from "../../core/database.d";
+import { database } from "../../../core/database";
+import { IMigration } from "../../../core/database.d";
 
 const db = database();
 
