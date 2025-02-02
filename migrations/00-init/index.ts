@@ -92,22 +92,22 @@ export const init:IMigration = {
     },
     up: () => db.schema
         .createTable("tagGroups", (table) => {
-            table.increments("id").primary();
+            table.bigIncrements();
             table.string("name").notNullable();
         })
         .createTable("tags", (table) => {
-            table.increments("id").primary();
+            table.bigIncrements();
             table.string("name").notNullable();
             table.integer("groupId").notNullable();
             table.foreign("groupId").references("tagGroups.id");
         })
         .createTable("synonyms", (table) => {
-            table.increments("id").primary();
+            table.bigIncrements();
             table.string("canonical").notNullable();
             table.string("synonym").notNullable();
         })
         .createTable("banners", (table) => {
-            table.increments("id").primary();
+            table.bigIncrements();
             table.string("tag");
             table.string("name");
             table.string("title");
