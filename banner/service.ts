@@ -28,7 +28,7 @@ export const Banner = {
 
         return newMedia;
     },
-    remove: async (bannerId: number):Promise<null> => {
+    remove: async (bannerId: string):Promise<null> => {
         const banner:IBanner = await Banner.loadById(bannerId);
 
         // Remove file from S3
@@ -39,7 +39,7 @@ export const Banner = {
 
         return null;
     },
-    download: async (bannerId:number) => {
+    download: async (bannerId:string) => {
         const banner:IBanner = await Banner.loadById(bannerId);
         return downloadMedia(`media/banner`, banner.url);
     }
