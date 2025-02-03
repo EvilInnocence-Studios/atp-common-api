@@ -98,7 +98,7 @@ export const init:IMigration = {
         .createTable("tags", (table) => {
             table.bigIncrements();
             table.string("name").notNullable();
-            table.integer("groupId").notNullable();
+            table.bigInteger("groupId").notNullable();
             table.foreign("groupId").references("tagGroups.id");
         })
         .createTable("synonyms", (table) => {
