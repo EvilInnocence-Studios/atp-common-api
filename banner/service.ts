@@ -8,11 +8,10 @@ const db = database();
 
 export const Banner = {
     ...basicCrudService<IBanner>("banners"),
-    upload: async (file:File):Promise<IBanner> => {
-        console.log(file);
+    upload: (overwrite: boolean) => async (file:File):Promise<IBanner> => {
         // Upload file to S3
         try {
-            await uploadMedia(`media/banner`, file, {failOnExist: true});
+            await uploadMedia(`media/banner`, file, {failOnExist: !overwrite});
         } catch(e) {
             console.log(e);
             throw error409("File already exists");

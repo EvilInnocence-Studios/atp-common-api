@@ -5,6 +5,9 @@ export const BannerEndpoints = {
     banner: {
         GET: get(BannerHandlers.search),
         POST: upload(BannerHandlers.create),
+        replace: {
+            POST: upload(BannerHandlers.replace),
+        },
         ":bannerId": {
             GET: get(BannerHandlers.get),
             PATCH: patch(BannerHandlers.update),
