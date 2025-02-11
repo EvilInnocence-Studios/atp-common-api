@@ -129,7 +129,7 @@ export const init:IMigration = {
         }),
     priority: 0,
     initData: () => db("tagGroups")
-        .insert(Object.keys(tagGroups).map((name) => ({ name })), "*")
+        .insert(Object.keys(tagGroups).map((name) => ({ name, filterable: true, })), "*")
         .then((groups) => db("tags")
             .insert(groups.reduce((acc, group) => [
                 ...acc,
@@ -139,7 +139,7 @@ export const init:IMigration = {
 
         // Duplicate the tags into a set of legacy tags 
         .then(() => db("tagGroups")
-            .insert(Object.keys(tagGroups).map((name) => ({ name: `${name}${legacy}` })), "*"))
+            .insert(Object.keys(tagGroups).map((name) => ({ name: `${name}${legacy}`, filterable: false, })), "*"))
         .then((groups) => db("tags")
             .insert(groups.reduce((acc, group) => [
                 ...acc,
