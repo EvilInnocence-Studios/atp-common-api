@@ -116,6 +116,7 @@ export const init:IMigration = {
             table.string("link");
             table.date("activeFrom");
             table.date("activeTo");
+            table.integer("order");
             table.string("buttonText");
             table.string("buttonLink");
             table.string("buttonLocation");
