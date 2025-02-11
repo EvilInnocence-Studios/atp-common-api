@@ -82,6 +82,8 @@ const synonyms:Index<string[]> = {
     "Mike 4": ["M4", "Michael 4"],
 }
 
+const legacy = " (Legacy)";
+
 export const init:IMigration = {
     down: () => {
         return db.schema
@@ -94,6 +96,7 @@ export const init:IMigration = {
         .createTable("tagGroups", (table) => {
             table.bigIncrements();
             table.string("name").notNullable();
+            table.boolean("filterable").notNullable().defaultTo(true);
         })
         .createTable("tags", (table) => {
             table.bigIncrements();
@@ -131,6 +134,16 @@ export const init:IMigration = {
             .insert(groups.reduce((acc, group) => [
                 ...acc,
                 ...tagGroups[group.name].map((tagName) => ({ name: tagName, groupId: group.id }))
+            ], []))
+        )
+
+        // Duplicate the tags into a set of legacy tags 
+        .then(() => db("tagGroups")
+            .insert(Object.keys(tagGroups).map((name) => ({ name: `${name}${legacy}` })), "*"))
+        .then((groups) => db("tags")
+            .insert(groups.reduce((acc, group) => [
+                ...acc,
+                ...tagGroups[group.name.replace(legacy, "")].map((tagName) => ({ name: tagName, groupId: group.id }))
             ], []))
         )
         .then(() => db("synonyms")
