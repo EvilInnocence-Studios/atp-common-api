@@ -2,7 +2,7 @@ import { pipeTo } from "serverless-api-boilerplate";
 import { ITag, ITagGroup, NewTagGroup } from "../../common-shared/tag/types";
 import { database } from "../../core/database";
 import { HandlerArgs } from "../../core/express/types";
-import { getBody, getParam, getParams } from "../../core/express/util";
+import { getBody, getParam, getParams } from "../../core/express/extractors";
 import { CheckPermissions } from "../../uac/permission/util";
 import { TagGroup, Tag} from "./service";
 import { Query } from "../../core-shared/express/types";

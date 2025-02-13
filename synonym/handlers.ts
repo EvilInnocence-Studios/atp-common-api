@@ -2,7 +2,7 @@ import { pipeTo } from "serverless-api-boilerplate";
 import { ISynonym, NewSynonym } from "../../common-shared/synonym/types";
 import { database } from "../../core/database";
 import { HandlerArgs } from "../../core/express/types";
-import { getBody, getParam } from "../../core/express/util";
+import { getBody, getParam } from "../../core/express/extractors";
 import { CheckPermissions } from "../../uac/permission/util";
 import { Synonym } from "./service";
 

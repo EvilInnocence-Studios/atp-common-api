@@ -1,8 +1,8 @@
 import { pipeTo } from "serverless-api-boilerplate";
 import { IBanner } from "../../common-shared/banner/types";
 import { database } from "../../core/database";
+import { getBody, getFile, getParam } from "../../core/express/extractors";
 import { HandlerArgs } from "../../core/express/types";
-import { getBody, getBodyParam, getFile, getParam } from "../../core/express/util";
 import { CheckPermissions } from "../../uac/permission/util";
 import { Banner } from "./service";
 
