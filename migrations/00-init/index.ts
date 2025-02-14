@@ -102,6 +102,7 @@ export const init:IMigration = {
             table.bigIncrements();
             table.string("name").notNullable();
             table.bigInteger("groupId").notNullable();
+            table.boolean("filterable").notNullable().defaultTo(true);
             table.foreign("groupId").references("tagGroups.id");
         })
         .createTable("synonyms", (table) => {
