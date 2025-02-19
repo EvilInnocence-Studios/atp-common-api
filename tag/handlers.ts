@@ -1,4 +1,4 @@
-import { pipeTo } from "serverless-api-boilerplate";
+import { getBodyParam, pipeTo } from "serverless-api-boilerplate";
 import { ITag, ITagGroup, NewTagGroup } from "../../common-shared/tag/types";
 import { database } from "../../core/database";
 import { HandlerArgs } from "../../core/express/types";
@@ -30,6 +30,11 @@ class TagHandlerClass {
         return pipeTo(TagGroup.remove, getParam("groupId"))(args);
     }
 
+    @CheckPermissions("tag.update")
+    public sortGroups (...args:HandlerArgs<any>):Promise<ITagGroup[]> {
+        return pipeTo(TagGroup.sort, getBodyParam("groupId"), getBodyParam("newIndex"))(args);
+    }
+
     @CheckPermissions("tag.view")
     public getAllTags (...args:HandlerArgs<Query>):Promise<ITag[]> {
         return Tag.search();
@@ -53,6 +58,11 @@ class TagHandlerClass {
     @CheckPermissions("tag.delete")
     public removeTag (...args:HandlerArgs<undefined>):Promise<null> {
         return pipeTo(Tag.remove, getParam("tagId"))(args);
+    }
+
+    @CheckPermissions("tag.update")
+    public sortTags (...args:HandlerArgs<any>):Promise<ITag[]> {
+        return pipeTo(Tag.sort, getParam("groupId"), getBodyParam("tagId"), getBodyParam("newIndex"))(args);
     }
 };
 
