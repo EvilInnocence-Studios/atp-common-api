@@ -1,11 +1,11 @@
-import { getBodyParam, pipeTo } from "serverless-api-boilerplate";
+import { pipeTo } from "serverless-api-boilerplate";
 import { ITag, ITagGroup, NewTagGroup } from "../../common-shared/tag/types";
-import { database } from "../../core/database";
-import { HandlerArgs } from "../../core/express/types";
-import { getBody, getParam, getParams } from "../../core/express/extractors";
-import { CheckPermissions } from "../../uac/permission/util";
-import { TagGroup, Tag} from "./service";
 import { Query } from "../../core-shared/express/types";
+import { database } from "../../core/database";
+import { getBody, getBodyParam, getParam } from "../../core/express/extractors";
+import { HandlerArgs } from "../../core/express/types";
+import { CheckPermissions } from "../../uac/permission/util";
+import { Tag, TagGroup } from "./service";
 
 const db = database();
 
