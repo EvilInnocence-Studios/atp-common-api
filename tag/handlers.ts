@@ -50,6 +50,11 @@ class TagHandlerClass {
         return Tag.create(getBody(args));
     }
 
+    @CheckPermissions("tag.view")
+    public getTag (...args:HandlerArgs<Query>):Promise<ITag> {
+        return pipeTo(Tag.loadById, getParam("tagId"))(args);
+    }
+
     @CheckPermissions("tag.update")
     public updateTag (...args:HandlerArgs<Partial<ITag>>):Promise<ITag> {
         return pipeTo(Tag.update, getParam("tagId"), getBody)(args);

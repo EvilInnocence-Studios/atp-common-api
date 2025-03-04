@@ -18,6 +18,7 @@ export const TagEndpoints = {
                     POST: post(TagHandlers.sortTags),
                 },
                 ":tagId": {
+                    GET: get(TagHandlers.getTag),
                     PATCH: patch(TagHandlers.updateTag),
                     DELETE: del(TagHandlers.removeTag),
                 }
