@@ -97,6 +97,7 @@ export const init:IMigration = {
             table.bigIncrements();
             table.string("name").notNullable();
             table.boolean("filterable").notNullable().defaultTo(true);
+            table.boolean("visible").notNullable().defaultTo(true);
             table.integer("order").notNullable().defaultTo(0);
         })
         .createTable("tags", (table) => {
