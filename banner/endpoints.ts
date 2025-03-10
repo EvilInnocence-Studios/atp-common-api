@@ -9,6 +9,9 @@ export const BannerEndpoints = {
             POST: upload(BannerHandlers.replace),
         },
         ":bannerId": {
+            replace: {
+                POST: upload(BannerHandlers.replaceBanner),
+            },
             GET: get(BannerHandlers.get),
             PATCH: patch(BannerHandlers.update),
             DELETE: del(BannerHandlers.remove),

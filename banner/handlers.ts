@@ -36,6 +36,11 @@ class BannerHandlerClass {
         return pipeTo(Banner.update, getParam("bannerId"), getBody)(args);
     }
 
+    @CheckPermissions("banner.update")
+    public replaceBanner (...args:HandlerArgs<Partial<IBanner>>):Promise<IBanner> {
+        return pipeTo(Banner.replace, getParam("bannerId"), getFile)(args);
+    }
+
     @CheckPermissions("banner.delete")
     public remove (...args:HandlerArgs<undefined>):Promise<null> {
         return pipeTo(Banner.remove, getParam("bannerId"))(args);

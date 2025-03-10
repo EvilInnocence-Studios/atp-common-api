@@ -38,6 +38,23 @@ export const Banner = {
 
         return null;
     },
+    replace: async (bannerId: string, file:File):Promise<IBanner> => {
+        const banner:IBanner = await Banner.loadById(bannerId);
+
+        // Remove existing file from S3
+        await removeMedia(`media/banner`, banner.url);
+
+        // Upload new file to S3
+        await uploadMedia(`media/banner`, file);
+
+        // Update record in database
+        const mediaToUpdate = { url: file.name, name: file.name };
+        const [updatedMedia] = await db("banners")
+            .where({ id: bannerId })
+            .update(mediaToUpdate, "*");
+
+        return updatedMedia;
+    },
     download: async (bannerId:string) => {
         const banner:IBanner = await Banner.loadById(bannerId);
         return downloadMedia(`media/banner`, banner.url);
