@@ -16,7 +16,10 @@ class CacheHandlerClass {
                 CallerReference: `${Date.now()}`,
                 Paths: {
                     Quantity: 1,
-                    Items: [`/${cacheType}*`]
+                    Items: [
+                        `/${cacheType}`,
+                        `/${cacheType}*`,
+                    ]
                 }
             }
         });
