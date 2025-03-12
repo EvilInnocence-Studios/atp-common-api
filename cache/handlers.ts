@@ -15,7 +15,7 @@ class CacheHandlerClass {
             InvalidationBatch: {
                 CallerReference: `${Date.now()}`,
                 Paths: {
-                    Quantity: 1,
+                    Quantity: 2,
                     Items: [
                         `/${cacheType}`,
                         `/${cacheType}*`,
