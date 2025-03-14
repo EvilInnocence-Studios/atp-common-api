@@ -1,3 +1,4 @@
+import { fromEnv } from "@aws-sdk/credential-providers";
 import { getParam } from "../../core/express/extractors";
 import { HandlerArgs } from "../../core/express/types";
 import { CheckPermissions } from "../../uac/permission/util";
@@ -9,7 +10,7 @@ class CacheHandlerClass {
         const cacheType = getParam("cacheType")(args);
         const DistributionId = process.env.CLOUDFRONT_DISTRIBUTION_ID;
 
-        const client = new CloudFrontClient({ region: process.env.AWS_REGION });
+        const client = new CloudFrontClient({ region: process.env.AWS_REGION, credentials: fromEnv() });
         const command = new CreateInvalidationCommand({
             DistributionId,
             InvalidationBatch: {
