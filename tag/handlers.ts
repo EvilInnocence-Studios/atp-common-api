@@ -1,4 +1,4 @@
-import { pipeTo } from "serverless-api-boilerplate";
+import { pipeTo } from "ts-functional";
 import { ITag, ITagGroup, NewTagGroup } from "../../common-shared/tag/types";
 import { Query } from "../../core-shared/express/types";
 import { database } from "../../core/database";

@@ -1,4 +1,4 @@
-import { pipeTo } from "serverless-api-boilerplate";
+import { pipeTo } from "ts-functional";
 import { IBanner } from "../../common-shared/banner/types";
 import { database } from "../../core/database";
 import { getBody, getFile, getParam } from "../../core/express/extractors";

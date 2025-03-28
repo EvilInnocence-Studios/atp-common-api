@@ -1,4 +1,4 @@
-import { pipeTo } from "serverless-api-boilerplate";
+import { pipeTo } from "ts-functional";
 import { ISynonym, NewSynonym } from "../../common-shared/synonym/types";
 import { database } from "../../core/database";
 import { HandlerArgs } from "../../core/express/types";
