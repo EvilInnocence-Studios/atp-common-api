@@ -17,7 +17,7 @@ class TagHandlerClass {
 
     @CheckPermissions("tag.view")
     public getGroups (...args:HandlerArgs<undefined>):Promise<ITagGroup[]> {
-        return pipeTo(TagGroup.search, getBody)(args);
+        return pipeTo(TagGroup.search, getBody<Query>)(args);
     }
 
     @CheckPermissions("tag.update")

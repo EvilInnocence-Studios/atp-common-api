@@ -5,6 +5,7 @@ import { getBody, getFile, getParam } from "../../core/express/extractors";
 import { HandlerArgs } from "../../core/express/types";
 import { CheckPermissions } from "../../uac/permission/util";
 import { Banner } from "./service";
+import { Query } from "../../core-shared/express/types";
 
 const db = database();
 
@@ -23,7 +24,7 @@ class BannerHandlerClass {
 
     @CheckPermissions("banner.view")
     public search (...args:HandlerArgs<undefined>):Promise<IBanner[]> {
-        return pipeTo(Banner.search, getBody)(args);
+        return pipeTo(Banner.search, getBody<Query>)(args);
     }
 
     @CheckPermissions("banner.view")
