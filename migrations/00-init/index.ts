@@ -90,9 +90,15 @@ export const init:IMigration = {
             .dropTableIfExists("banners")
             .dropTableIfExists("synonyms")
             .dropTableIfExists("tags")
-            .dropTableIfExists("tagGroups");
+            .dropTableIfExists("tagGroups")
+            .dropTableIfExists("settings");
     },
     up: () => db.schema
+        .createTable("settings", (table) => {
+            table.bigIncrements();
+            table.string("key").notNullable().unique();
+            table.string("value");
+        })
         .createTable("tagGroups", (table) => {
             table.bigIncrements();
             table.string("name").notNullable();
