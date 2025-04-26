@@ -5,5 +5,5 @@ import { basicCrudService } from "../../core/express/service/common";
 const db = database();
 
 export const Setting = {
-    ...basicCrudService<ISetting>("settings"),
+    ...basicCrudService<ISetting>("settings", "key"),
 };
