@@ -1,6 +1,7 @@
 import { insertPermissions, insertRolePermissions, insertRoles } from "../../../uac/migrations/util";
 import { database } from "../../../core/database";
 import { IMigration } from "../../../core/dbMigrations";
+import { bannersTable, linkListsTable, linksTable, settingsTable, synonymsTable, tagGroupsTable, tagsTable } from "../tables";
 
 const db = database();
 
@@ -27,6 +28,11 @@ const permissions = [
     { name: "settings.create", description: "Can create settings"        },
     { name: "settings.delete", description: "Can delete settings"        },
 
+    { name: "links.view",       description: "Can view links"             },
+    { name: "links.update",     description: "Can update links"           },
+    { name: "links.create",     description: "Can create links"           },
+    { name: "links.delete",     description: "Can delete links"           },
+
     {name: "cache.clear",       description: "Can clear the cache"        },
 ];
 
@@ -49,11 +55,16 @@ const rolePermissions = [
     { roleName: "SuperUser", permissionName: "settings.update" },
     { roleName: "SuperUser", permissionName: "settings.create" },
     { roleName: "SuperUser", permissionName: "settings.delete" },
+    { roleName: "SuperUser", permissionName: "links.view" },
+    { roleName: "SuperUser", permissionName: "links.update" },
+    { roleName: "SuperUser", permissionName: "links.create" },
+    { roleName: "SuperUser", permissionName: "links.delete" },
     { roleName: "SuperUser", permissionName: "cache.clear" },
     { roleName: "Public", permissionName: "tag.view" },
     { roleName: "Public", permissionName: "synonym.view" },
     { roleName: "Public", permissionName: "banner.view" },
     { roleName: "Public", permissionName: "settings.view" },
+    { roleName: "Public", permissionName: "links.view" },
 ];
 
 export const init:IMigration = {
@@ -67,53 +78,48 @@ export const init:IMigration = {
             .dropTableIfExists("synonyms")
             .dropTableIfExists("tags")
             .dropTableIfExists("tagGroups")
-            .dropTableIfExists("settings");
+            .dropTableIfExists("settings")
+            .dropTableIfExists("links")
+            .dropTableIfExists("linkLists");
     },
     up: () => db.schema
-        .createTable("settings", (table) => {
-            table.bigIncrements();
-            table.string("key").notNullable().unique();
-            table.string("value");
-        })
-        .createTable("tagGroups", (table) => {
-            table.bigIncrements();
-            table.string("name").notNullable();
-            table.boolean("filterable").notNullable().defaultTo(true);
-            table.boolean("visible").notNullable().defaultTo(true);
-            table.integer("order").notNullable().defaultTo(0);
-        })
-        .createTable("tags", (table) => {
-            table.bigIncrements();
-            table.string("name").notNullable();
-            table.bigInteger("groupId").notNullable().references("tagGroups.id").onDelete("CASCADE");
-            table.boolean("filterable").notNullable().defaultTo(true);
-            table.integer("order").notNullable().defaultTo(0);
-        })
-        .createTable("synonyms", (table) => {
-            table.bigIncrements();
-            table.string("canonical").notNullable();
-            table.string("synonym").notNullable();
-        })
-        .createTable("banners", (table) => {
-            table.bigIncrements();
-            table.string("tag");
-            table.string("name");
-            table.string("title");
-            table.string("description");
-            table.string("url").notNullable().unique();
-            table.string("link");
-            table.date("activeFrom");
-            table.date("activeTo");
-            table.integer("order");
-            table.string("buttonText");
-            table.string("buttonLink");
-            table.string("buttonLocation");
-            table.string("buttonTextAlt");
-            table.string("buttonLinkAlt");
-            table.string("buttonLocationAlt");
-        }),
+        .createTable("settings", settingsTable)
+        .createTable("tagGroups", tagGroupsTable)
+        .createTable("tags", tagsTable)
+        .createTable("synonyms", synonymsTable)
+        .createTable("banners", bannersTable)
+        .createTable("linkLists", linkListsTable)
+        .createTable("links", linksTable),
     initData: async () => {
         await insertPermissions(db, permissions);
         await insertRolePermissions(db, rolePermissions);
     },
 }
+
+export const links:IMigration = {
+    name: "links",
+    module: "common",
+    description: "Create links table",
+    order: 1,
+    down: () => db.schema
+        .dropTableIfExists("links")
+        .dropTableIfExists("linkLists"),
+    up: () => db.schema
+        .createTable("linkLists", linksTable)
+        .createTable("links", linkListsTable),
+    initData: async () => {
+        await insertPermissions(db, [
+            { name: "links.view", description: "Can view links" },
+            { name: "links.update", description: "Can update links" },
+            { name: "links.create", description: "Can create links" },
+            { name: "links.delete", description: "Can delete links" },
+        ]);
+        await insertRolePermissions(db, [
+            { roleName: "SuperUser", permissionName: "links.view" },
+            { roleName: "SuperUser", permissionName: "links.update" },
+            { roleName: "SuperUser", permissionName: "links.create" },
+            { roleName: "SuperUser", permissionName: "links.delete" },
+            { roleName: "Public", permissionName: "links.view" },
+        ]);
+    }
+};
