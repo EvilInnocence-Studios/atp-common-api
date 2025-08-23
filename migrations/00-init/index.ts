@@ -22,6 +22,11 @@ const permissions = [
     { name: "banner.create",    description: "Can create banners"         },
     { name: "banner.delete",    description: "Can delete banners"         },
 
+    { name: "settings.view",   description: "Can view settings"          },
+    { name: "settings.update", description: "Can update settings"        },
+    { name: "settings.create", description: "Can create settings"        },
+    { name: "settings.delete", description: "Can delete settings"        },
+
     {name: "cache.clear",       description: "Can clear the cache"        },
 ];
 
@@ -40,10 +45,15 @@ const rolePermissions = [
     { roleName: "SuperUser", permissionName: "banner.update" },
     { roleName: "SuperUser", permissionName: "banner.create" },
     { roleName: "SuperUser", permissionName: "banner.delete" },
+    { roleName: "SuperUser", permissionName: "settings.view" },
+    { roleName: "SuperUser", permissionName: "settings.update" },
+    { roleName: "SuperUser", permissionName: "settings.create" },
+    { roleName: "SuperUser", permissionName: "settings.delete" },
     { roleName: "SuperUser", permissionName: "cache.clear" },
     { roleName: "Public", permissionName: "tag.view" },
     { roleName: "Public", permissionName: "synonym.view" },
     { roleName: "Public", permissionName: "banner.view" },
+    { roleName: "Public", permissionName: "settings.view" },
 ];
 
 export const init:IMigration = {
