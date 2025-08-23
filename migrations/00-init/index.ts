@@ -105,8 +105,8 @@ export const links:IMigration = {
         .dropTableIfExists("links")
         .dropTableIfExists("linkLists"),
     up: () => db.schema
-        .createTable("linkLists", linksTable)
-        .createTable("links", linkListsTable),
+        .createTable("linkLists", linkListsTable)
+        .createTable("links", linksTable),
     initData: async () => {
         await insertPermissions(db, [
             { name: "links.view", description: "Can view links" },

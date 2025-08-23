@@ -10,52 +10,52 @@ import { Link, LinkList } from "./services";
 const db = database();
 
 class LinkHandlerClass {
-    @CheckPermissions("link.view")
+    @CheckPermissions("links.view")
     public async getLists(...args:HandlerArgs<undefined>): Promise<ILinkList[]> {
         return pipeTo(LinkList.search, getBody<Query>)(args);
     }
 
-    @CheckPermissions("link.create")
+    @CheckPermissions("links.create")
     public async createList(...args:HandlerArgs<NewLinkList>): Promise<ILinkList> {
         return pipeTo(LinkList.create, getBody)(args);
     }
 
-    @CheckPermissions("link.update")
+    @CheckPermissions("links.update")
     public async updateList(...args:HandlerArgs<Partial<ILinkList>>): Promise<ILinkList> {
         return pipeTo(LinkList.update, getParam("listId"), getBody)(args);
     }
 
-    @CheckPermissions("link.delete")
+    @CheckPermissions("links.delete")
     public async removeList(...args:HandlerArgs<undefined>): Promise<null> {
         return pipeTo(LinkList.remove, getParam("listId"))(args);
     }
 
-    @CheckPermissions("link.view")
+    @CheckPermissions("links.view")
     public async getLinks(...args:HandlerArgs<Query>): Promise<ILink[]> {
         return Link.search({ listId: getParam<string>("listId")(args) });
     }
 
-    @CheckPermissions("link.create")
+    @CheckPermissions("links.create")
     public async addLink(...args:HandlerArgs<ILink>): Promise<ILink> {
         return Link.create(getBody(args));
     }
 
-    @CheckPermissions("link.view")
+    @CheckPermissions("links.view")
     public async getLink(...args:HandlerArgs<Query>): Promise<ILink> {
         return pipeTo(Link.loadById, getParam("linkId"))(args);
     }
 
-    @CheckPermissions("link.update")
+    @CheckPermissions("links.update")
     public async updateLink(...args:HandlerArgs<Partial<ILink>>): Promise<ILink> {
         return pipeTo(Link.update, getParam("linkId"), getBody)(args);
     }
 
-    @CheckPermissions("link.delete")
+    @CheckPermissions("links.delete")
     public async removeLink(...args:HandlerArgs<undefined>): Promise<null> {
         return pipeTo(Link.remove, getParam("linkId"))(args);
     }
 
-    @CheckPermissions("link.update")
+    @CheckPermissions("links.update")
     public async sortLinks(...args:HandlerArgs<any>): Promise<ILink[]> {
         return pipeTo(Link.sort, getParam("listId"), getBodyParam("linkId"), getBodyParam("newIndex"))(args);
     }
