@@ -60,3 +60,13 @@ export const linksTable = (table:Knex.TableBuilder) => {
     table.string("url").notNullable();
     table.integer("order").notNullable().defaultTo(0);
 };
+
+export const contentTable = (table:Knex.TableBuilder) => {
+    table.bigIncrements();
+    table.string("slug").notNullable().unique();
+    table.string("title");
+    table.enum("type", ["page", "snippet"]).notNullable().defaultTo("page");
+    table.string("content").notNullable().defaultTo("");
+    table.boolean("enabled").notNullable().defaultTo(false);
+    table.date("publishDate");
+}

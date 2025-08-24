@@ -1,7 +1,7 @@
 import { insertPermissions, insertRolePermissions, insertRoles } from "../../../uac/migrations/util";
 import { database } from "../../../core/database";
 import { IMigration } from "../../../core/dbMigrations";
-import { bannersTable, linkListsTable, linksTable, settingsTable, synonymsTable, tagGroupsTable, tagsTable } from "../tables";
+import { bannersTable, contentTable, linkListsTable, linksTable, settingsTable, synonymsTable, tagGroupsTable, tagsTable } from "../tables";
 
 const db = database();
 
@@ -33,6 +33,12 @@ const permissions = [
     { name: "links.create",     description: "Can create links"           },
     { name: "links.delete",     description: "Can delete links"           },
 
+    { name: "content.view",      description: "Can view content"          },
+    { name: "content.update",    description: "Can update content"        },
+    { name: "content.create",    description: "Can create content"        },
+    { name: "content.delete",    description: "Can delete content"        },
+    { name: "content.disabled",  description: "Can view disabled content" },
+
     {name: "cache.clear",       description: "Can clear the cache"        },
 ];
 
@@ -59,12 +65,18 @@ const rolePermissions = [
     { roleName: "SuperUser", permissionName: "links.update" },
     { roleName: "SuperUser", permissionName: "links.create" },
     { roleName: "SuperUser", permissionName: "links.delete" },
+    { roleName: "SuperUser", permissionName: "content.view" },
+    { roleName: "SuperUser", permissionName: "content.update" },
+    { roleName: "SuperUser", permissionName: "content.create" },
+    { roleName: "SuperUser", permissionName: "content.delete" },
+    { roleName: "SuperUser", permissionName: "content.disabled" },
     { roleName: "SuperUser", permissionName: "cache.clear" },
     { roleName: "Public", permissionName: "tag.view" },
     { roleName: "Public", permissionName: "synonym.view" },
     { roleName: "Public", permissionName: "banner.view" },
     { roleName: "Public", permissionName: "settings.view" },
     { roleName: "Public", permissionName: "links.view" },
+    { roleName: "Public", permissionName: "content.view" },
 ];
 
 export const init:IMigration = {
@@ -80,7 +92,8 @@ export const init:IMigration = {
             .dropTableIfExists("tagGroups")
             .dropTableIfExists("settings")
             .dropTableIfExists("links")
-            .dropTableIfExists("linkLists");
+            .dropTableIfExists("linkLists")
+            .dropTableIfExists("content");
     },
     up: () => db.schema
         .createTable("settings", settingsTable)
@@ -89,7 +102,8 @@ export const init:IMigration = {
         .createTable("synonyms", synonymsTable)
         .createTable("banners", bannersTable)
         .createTable("linkLists", linkListsTable)
-        .createTable("links", linksTable),
+        .createTable("links", linksTable)
+        .createTable("content", contentTable),
     initData: async () => {
         await insertPermissions(db, permissions);
         await insertRolePermissions(db, rolePermissions);
@@ -120,6 +134,34 @@ export const links:IMigration = {
             { roleName: "SuperUser", permissionName: "links.create" },
             { roleName: "SuperUser", permissionName: "links.delete" },
             { roleName: "Public", permissionName: "links.view" },
+        ]);
+    }
+};
+
+export const content:IMigration = {
+    name: "content",
+    module: "common",
+    description: "Create content table",
+    order: 2,
+    down: () => db.schema
+        .dropTableIfExists("content"),
+    up: () => db.schema
+        .createTable("content", contentTable),
+    initData: async () => {
+        await insertPermissions(db, [
+            { name: "content.view", description: "Can view content" },
+            { name: "content.update", description: "Can update content" },
+            { name: "content.create", description: "Can create content" },
+            { name: "content.delete", description: "Can delete content" },
+            { name: "content.disabled", description: "Can view disabled content" },
+        ]);
+        await insertRolePermissions(db, [
+            { roleName: "SuperUser", permissionName: "content.view" },
+            { roleName: "SuperUser", permissionName: "content.update" },
+            { roleName: "SuperUser", permissionName: "content.create" },
+            { roleName: "SuperUser", permissionName: "content.delete" },
+            { roleName: "SuperUser", permissionName: "content.disabled" },
+            { roleName: "Public", permissionName: "content.view" },
         ]);
     }
 };
