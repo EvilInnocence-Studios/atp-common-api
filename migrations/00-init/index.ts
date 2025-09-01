@@ -1,7 +1,7 @@
 import { insertPermissions, insertRolePermissions, insertRoles } from "../../../uac/migrations/util";
 import { database } from "../../../core/database";
 import { IMigration } from "../../../core/dbMigrations";
-import { bannersTable, contentTable, linkListsTable, linksTable, settingsTable, synonymsTable, tagGroupsTable, tagsTable } from "../tables";
+import { bannersTable, contentTable, linkListsTable, linksTable, mediaTable, settingsTable, synonymsTable, tagGroupsTable, tagsTable } from "../tables";
 
 const db = database();
 
@@ -39,6 +39,11 @@ const permissions = [
     { name: "content.delete",    description: "Can delete content"        },
     { name: "content.disabled",  description: "Can view disabled content" },
 
+    { name: "media.view",       description: "Can view media"             },
+    { name: "media.update",     description: "Can update media"           },
+    { name: "media.create",     description: "Can create media"           },
+    { name: "media.delete",     description: "Can delete media"           },
+
     {name: "cache.clear",       description: "Can clear the cache"        },
 ];
 
@@ -70,6 +75,10 @@ const rolePermissions = [
     { roleName: "SuperUser", permissionName: "content.create" },
     { roleName: "SuperUser", permissionName: "content.delete" },
     { roleName: "SuperUser", permissionName: "content.disabled" },
+    { roleName: "SuperUser", permissionName: "media.view" },
+    { roleName: "SuperUser", permissionName: "media.update" },
+    { roleName: "SuperUser", permissionName: "media.create" },
+    { roleName: "SuperUser", permissionName: "media.delete" },
     { roleName: "SuperUser", permissionName: "cache.clear" },
     { roleName: "Public", permissionName: "tag.view" },
     { roleName: "Public", permissionName: "synonym.view" },
@@ -77,6 +86,7 @@ const rolePermissions = [
     { roleName: "Public", permissionName: "settings.view" },
     { roleName: "Public", permissionName: "links.view" },
     { roleName: "Public", permissionName: "content.view" },
+    { roleName: "Public", permissionName: "media.view" },
 ];
 
 export const init:IMigration = {
@@ -93,7 +103,8 @@ export const init:IMigration = {
             .dropTableIfExists("settings")
             .dropTableIfExists("links")
             .dropTableIfExists("linkLists")
-            .dropTableIfExists("content");
+            .dropTableIfExists("content")
+            .dropTableIfExists("media");
     },
     up: () => db.schema
         .createTable("settings", settingsTable)
@@ -103,7 +114,8 @@ export const init:IMigration = {
         .createTable("banners", bannersTable)
         .createTable("linkLists", linkListsTable)
         .createTable("links", linksTable)
-        .createTable("content", contentTable),
+        .createTable("content", contentTable)
+        .createTable("media", mediaTable),
     initData: async () => {
         await insertPermissions(db, permissions);
         await insertRolePermissions(db, rolePermissions);
@@ -162,6 +174,32 @@ export const content:IMigration = {
             { roleName: "SuperUser", permissionName: "content.delete" },
             { roleName: "SuperUser", permissionName: "content.disabled" },
             { roleName: "Public", permissionName: "content.view" },
+        ]);
+    }
+};
+
+export const media:IMigration = {
+    name: "media",
+    module: "common",
+    description: "Create media table",
+    order: 3,
+    down: () => db.schema
+        .dropTableIfExists("media"),
+    up: () => db.schema
+        .createTable("media", mediaTable),
+    initData: async () => {
+        await insertPermissions(db, [
+            { name: "media.view", description: "Can view media" },
+            { name: "media.update", description: "Can update media" },
+            { name: "media.create", description: "Can create media" },
+            { name: "media.delete", description: "Can delete media" },
+        ]);
+        await insertRolePermissions(db, [
+            { roleName: "SuperUser", permissionName: "media.view" },
+            { roleName: "SuperUser", permissionName: "media.update" },
+            { roleName: "SuperUser", permissionName: "media.create" },
+            { roleName: "SuperUser", permissionName: "media.delete" },
+            { roleName: "Public", permissionName: "media.view" },
         ]);
     }
 };

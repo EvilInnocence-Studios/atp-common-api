@@ -1,3 +1,3 @@
-import { content, links } from "./00-init";
+import { content, links, media } from "./00-init";
 
-export const migrations = [links, content];
+export const migrations = [links, content, media];

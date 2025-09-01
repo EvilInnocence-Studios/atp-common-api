@@ -58,7 +58,7 @@ export const linksTable = (table:Knex.TableBuilder) => {
     table.bigInteger("listId").notNullable().references("linkLists.id").onDelete("CASCADE");
     table.string("text").notNullable();
     table.string("url").notNullable();
-    table.integer("order").notNullable().defaultTo(0);
+    table.smallint("order").notNullable().defaultTo(0);
 };
 
 export const contentTable = (table:Knex.TableBuilder) => {
@@ -66,7 +66,15 @@ export const contentTable = (table:Knex.TableBuilder) => {
     table.string("slug").notNullable().unique();
     table.string("title");
     table.enum("type", ["page", "snippet"]).notNullable().defaultTo("page");
-    table.string("content").notNullable().defaultTo("");
+    table.text("content").notNullable().defaultTo("");
     table.boolean("enabled").notNullable().defaultTo(false);
     table.date("publishDate");
 }
+
+export const mediaTable = (table:Knex.TableBuilder) => {
+    table.bigIncrements();
+    table.string("url").notNullable().unique();
+    table.string("altText");
+    table.string("title");
+    table.string("caption");
+ }

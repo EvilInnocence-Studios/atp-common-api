@@ -1,13 +1,10 @@
 import { pipeTo } from "ts-functional";
 import { IBanner } from "../../common-shared/banner/types";
-import { database } from "../../core/database";
+import { Query } from "../../core-shared/express/types";
 import { getBody, getFile, getParam } from "../../core/express/extractors";
 import { HandlerArgs } from "../../core/express/types";
 import { CheckPermissions } from "../../uac/permission/util";
 import { Banner } from "./service";
-import { Query } from "../../core-shared/express/types";
-
-const db = database();
 
 class BannerHandlerClass {
     @CheckPermissions("banner.create")
@@ -17,7 +14,7 @@ class BannerHandlerClass {
     }
 
     @CheckPermissions("banner.create")
-    public replace (...args:HandlerArgs<Partial<any>>):Promise<IBanner> {
+    public replace (...args:HandlerArgs<Partial<IBanner>>):Promise<IBanner> {
         console.log(args);
         return pipeTo(Banner.upload(true), getFile)(args);
     }
