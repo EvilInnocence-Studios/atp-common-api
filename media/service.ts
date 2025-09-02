@@ -2,7 +2,7 @@ import { IMedia } from "../../common-shared/media/types";
 import { Setting } from "../../common/setting/service";
 import { basicCrudService, mediaService } from "../../core/express/service/common";
 
-const MediaBasic = basicCrudService<IMedia>("media");
+const MediaBasic = basicCrudService<IMedia>("media", "title" );
 
 export const MediaService = {
     ...MediaBasic,
@@ -11,7 +11,7 @@ export const MediaService = {
         uniqueColumns: ["url"],
         newRecord: (file: File) => ({ url: file.name, title: file.name, altText: "", caption: "" }),
         updateRecord: (file: File) => ({ url: file.name }),
-        getFolder: () => Setting.get("mediaFolder"),
+        getFolder: () => Setting.get("mediaImageFolder"),
         getEntity: MediaBasic.loadById,
         getFileName: (media: IMedia) => media.url,
     })
