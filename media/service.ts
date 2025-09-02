@@ -1,6 +1,7 @@
 import { IMedia } from "../../common-shared/media/types";
 import { Setting } from "../../common/setting/service";
-import { basicCrudService, mediaService } from "../../core/express/service/common";
+import { basicCrudService } from "../../core/express/service/common";
+import { mediaService } from "../../core/express/service/media";
 
 const MediaBasic = basicCrudService<IMedia>("media", "title" );
 

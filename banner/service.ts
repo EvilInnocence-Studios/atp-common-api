@@ -1,6 +1,7 @@
 import { IBanner } from "../../common-shared/banner/types";
 import { Setting } from "../../common/setting/service";
-import { basicCrudService, mediaService } from "../../core/express/service/common";
+import { basicCrudService } from "../../core/express/service/common";
+import { mediaService } from "../../core/express/service/media";
 
 const BannerBasic = basicCrudService<IBanner>("banners");
 
