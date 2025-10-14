@@ -78,3 +78,13 @@ export const mediaTable = (table:Knex.TableBuilder) => {
     table.string("title");
     table.string("caption");
  }
+
+ export const pluginsTable = (table:Knex.TableBuilder) => {
+    table.bigIncrements();
+    table.string("group").notNullable();
+    table.string("key").notNullable();
+    table.smallint("sortOrder");
+    table.json("settings").notNullable().defaultTo("{}");
+    table.unique(["group", "identifier"]);
+ }
+ 
