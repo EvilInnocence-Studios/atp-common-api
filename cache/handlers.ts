@@ -15,7 +15,7 @@ class CacheHandlerClass {
             DistributionId,
             InvalidationBatch: {
                 CallerReference: `${Date.now()}`,
-                Paths: !!cacheType ? {
+                Paths: cacheType !== "all" ? {
                     Quantity: 2,
                     Items: [
                         `/${cacheType}`,
