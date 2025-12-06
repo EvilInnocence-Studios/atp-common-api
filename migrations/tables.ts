@@ -89,3 +89,8 @@ export const mediaTable = (table:Knex.TableBuilder) => {
     table.unique(["group", "identifier"]);
  }
  
+ export const layoutsTable = (table:Knex.TableBuilder) => {
+    table.bigIncrements();
+    table.string("name").notNullable();
+    table.json("json").notNullable().defaultTo("{}");
+ }
