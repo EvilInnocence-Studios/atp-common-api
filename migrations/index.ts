@@ -1,7 +1,7 @@
 import { init } from "./00-init";
-import { addLayouts } from "./01-add-layouts";
+import { addThemes } from "./01-add-themes";
 
 export const migrations = [
     init,
-    addLayouts,
+    addThemes,
 ];

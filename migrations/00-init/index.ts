@@ -1,7 +1,10 @@
 import { insertPermissions, insertRolePermissions, insertRoles } from "../../../uac/migrations/util";
 import { database } from "../../../core/database";
 import { IMigration } from "../../../core/dbMigrations";
-import { bannersTable, contentTable, linkListsTable, linksTable, mediaTable, settingsTable, synonymsTable, tagGroupsTable, tagsTable } from "../tables";
+import {
+    bannersTable, contentTable, linkListsTable, linksTable, mediaTable, settingsTable,
+    synonymsTable, tagGroupsTable, tagsTable, themesTable,
+} from "../tables";
 
 const db = database();
 
@@ -44,6 +47,11 @@ const permissions = [
     { name: "media.create",     description: "Can create media"           },
     { name: "media.delete",     description: "Can delete media"           },
 
+    { name: "theme.view",       description: "Can view themes"            },
+    { name: "theme.update",     description: "Can update themes"          },
+    { name: "theme.create",     description: "Can create themes"          },
+    { name: "theme.delete",     description: "Can delete themes"          },
+
     {name: "cache.clear",       description: "Can clear the cache"        },
 ];
 
@@ -80,6 +88,10 @@ const rolePermissions = [
     { roleName: "SuperUser", permissionName: "media.create" },
     { roleName: "SuperUser", permissionName: "media.delete" },
     { roleName: "SuperUser", permissionName: "cache.clear" },
+    { roleName: "SuperUser", permissionName: "theme.view" },
+    { roleName: "SuperUser", permissionName: "theme.update" },
+    { roleName: "SuperUser", permissionName: "theme.create" },
+    { roleName: "SuperUser", permissionName: "theme.delete" },
     { roleName: "Public", permissionName: "tag.view" },
     { roleName: "Public", permissionName: "synonym.view" },
     { roleName: "Public", permissionName: "banner.view" },
@@ -87,6 +99,7 @@ const rolePermissions = [
     { roleName: "Public", permissionName: "links.view" },
     { roleName: "Public", permissionName: "content.view" },
     { roleName: "Public", permissionName: "media.view" },
+    { roleName: "Public", permissionName: "theme.view" },
 ];
 
 export const init:IMigration = {
@@ -104,7 +117,8 @@ export const init:IMigration = {
             .dropTableIfExists("links")
             .dropTableIfExists("linkLists")
             .dropTableIfExists("content")
-            .dropTableIfExists("media");
+            .dropTableIfExists("media")
+            .dropTableIfExists("themes");
     },
     up: () => db.schema
         .createTable("settings", settingsTable)
@@ -115,7 +129,8 @@ export const init:IMigration = {
         .createTable("linkLists", linkListsTable)
         .createTable("links", linksTable)
         .createTable("content", contentTable)
-        .createTable("media", mediaTable),
+        .createTable("media", mediaTable)
+        .createTable("themes", themesTable),
     initData: async () => {
         await insertPermissions(db, permissions);
         await insertRolePermissions(db, rolePermissions);

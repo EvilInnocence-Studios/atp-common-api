@@ -9,4 +9,5 @@ export const commonCaching:IBehavior[] = [
     {precedence: 7, pathPattern: "/media*",    cache: true },
     {precedence: 8, pathPattern: "/setting*",  cache: true },
     {precedence: 9, pathPattern: "/synonym*",  cache: true },
+    {precedence: 10, pathPattern: "/theme*",   cache: true },
 ];
