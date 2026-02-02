@@ -1,4 +1,4 @@
-import { del, get, patch, post } from "../../core/express/wrappers";
+import { del, get, patch, post, upload } from "../../core/express/wrappers";
 import { ThemeHandlers } from "./handlers";
 
 export const ThemeEndpoints = {
@@ -10,9 +10,9 @@ export const ThemeEndpoints = {
             PATCH: patch(ThemeHandlers.update),
             DELETE: del(ThemeHandlers.remove),
             "image": {
-                POST: post(ThemeHandlers.uploadImage),
+                POST: upload(ThemeHandlers.uploadImage),
                 DELETE: post(ThemeHandlers.removeImage),
-                PATCH: patch(ThemeHandlers.replaceImage),
+                PATCH: upload(ThemeHandlers.replaceImage),
             }
         }
     }

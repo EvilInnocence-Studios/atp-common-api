@@ -1,7 +1,7 @@
 import { pipeTo } from "ts-functional";
 import { ITheme } from "../../common-shared/theme/types";
 import { Query } from "../../core-shared/express/types";
-import { getBody, getBodyParam, getParam } from "../../core/express/extractors";
+import { getBody, getBodyParam, getFile, getParam } from "../../core/express/extractors";
 import { HandlerArgs } from "../../core/express/types";
 import { CheckPermissions } from "../../uac/permission/util";
 import { Theme } from "./service";
@@ -34,7 +34,7 @@ class ThemeHandlerClass {
 
     @CheckPermissions("theme.update")
     public uploadImage (...args:HandlerArgs<undefined>):Promise<ITheme> {
-        return pipeTo(Theme.image.upload, getParam("themeId"), getBodyParam("overwrite"), getBody<File>)(args);
+        return pipeTo(Theme.image.upload, getParam("themeId"), getBodyParam("overwrite"), getFile)(args);
     }
 
     @CheckPermissions("theme.update")
@@ -44,7 +44,7 @@ class ThemeHandlerClass {
 
     @CheckPermissions("theme.update")
     public replaceImage (...args:HandlerArgs<undefined>):Promise<ITheme> {
-        return pipeTo(Theme.image.replace, getParam("themeId"), getBody<File>)(args);
+        return pipeTo(Theme.image.replace, getParam("themeId"), getFile)(args);
     }
 }
 
