@@ -106,7 +106,7 @@ export const init:IMigration = {
     name: "init",
     module: "common",
     description: "Install the common module",
-    order: 0,
+    order: 1,
     down: () => {
         return db.schema
             .dropTableIfExists("banners")
