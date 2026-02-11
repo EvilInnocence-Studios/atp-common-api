@@ -5,3 +5,5 @@ export const migrations = [
     init,
     addThemes,
 ];
+
+export const setupMigrations = [init];
