@@ -1,6 +1,4 @@
-import { IBehavior } from "../core/cloudfront";
-
-export const commonCaching:IBehavior[] = [
+export const commonCaching = [
     {precedence: 1, pathPattern: "/group*",    cache: true },
     {precedence: 2, pathPattern: "/tag*",      cache: true },
     {precedence: 3, pathPattern: "/banner*",   cache: true },
