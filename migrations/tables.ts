@@ -58,7 +58,7 @@ export const linksTable = (table:Knex.TableBuilder) => {
     table.bigInteger("listId").notNullable().references("linkLists.id").onDelete("CASCADE");
     table.string("text").notNullable();
     table.string("url").notNullable();
-    table.bigInteger("subMenuId").nullable().references("linkLists.id").onDelete("SET NULL");
+    table.string("subMenuKey").nullable();
     table.smallint("order").notNullable().defaultTo(0);
 };
 
