@@ -1,10 +1,11 @@
-import { insertPermissions, insertRolePermissions, insertRoles } from "../../../uac/migrations/util";
 import { database } from "../../../core/database";
 import { IMigration } from "../../../core/dbMigrations";
+import { insertPermissions, insertRolePermissions } from "../../../uac/migrations/util";
 import {
     bannersTable, contentTable, linkListsTable, linksTable, mediaTable, settingsTable,
     synonymsTable, tagGroupsTable, tagsTable, themesTable,
 } from "../tables";
+import { insertSettings } from "../util";
 
 const db = database();
 
@@ -102,13 +103,25 @@ const rolePermissions = [
     { roleName: "Public", permissionName: "theme.view" },
 ];
 
+const settings = [
+    {key: "defaultPageSize", value: "12"},
+    {key: "pageSizeOptions", value: "12,24,48,96"},
+    {key: "awsRegion", value: "us-east-1"},
+    {key: "forgotLoginSubject", value: "Forgot Login"},
+    {key: "roleChangeSubject", value: "Role Change"},
+    {key: "newAccountSubject", value: "New Account"},
+    {key: "bannerImageFolder", value: "media/banner"},
+    {key: "mediaImageFolder", value: "media/image"},
+    {key: "themeThumbnailFolder", value: "media/theme"},
+]
+
 export const init:IMigration = {
     name: "init",
     module: "common",
     description: "Install the common module",
     order: 1,
     version: "1.0.0",
-    down: () => {
+    down: (params?: Record<string, string>) => {
         return db.schema
             .dropTableIfExists("banners")
             .dropTableIfExists("synonyms")
@@ -121,7 +134,17 @@ export const init:IMigration = {
             .dropTableIfExists("media")
             .dropTableIfExists("themes");
     },
-    up: () => db.schema
+    parameters: [
+        {name: "mediaBucket",   description: "The AWS bucket to use for media storage"},
+        {name: "siteName",      description: "The name of the site"},
+        {name: "adminAppName",  description: "The name of the admin app"},
+        {name: "publicAppName", description: "The name of the public app"},
+        {name: "imageHost",     description: "The hostname for the image server"},
+    ],
+    up: (params) => {
+        console.log("---- RECEIVED PARAMS ----", params);
+        return db.schema
+
         .createTable("settings", settingsTable)
         .createTable("tagGroups", tagGroupsTable)
         .createTable("tags", tagsTable)
@@ -131,9 +154,14 @@ export const init:IMigration = {
         .createTable("links", linksTable)
         .createTable("content", contentTable)
         .createTable("media", mediaTable)
-        .createTable("themes", themesTable),
-    initData: async () => {
+        .createTable("themes", themesTable);
+    },
+    initData: async (params?: Record<string, string>) => {
         await insertPermissions(db, permissions);
         await insertRolePermissions(db, rolePermissions);
+        await insertSettings(db, [
+            ...settings,
+            ...Object.entries(params || {}).map(([key, value]) => ({key, value})),
+        ]);
     },
 }
