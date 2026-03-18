@@ -115,25 +115,12 @@ const settings = [
     {key: "themeThumbnailFolder", value: "media/theme"},
 ]
 
-export const init:IMigration = {
-    name: "init",
+export const initSettings:IMigration = {
+    name: "initSettings",
     module: "common",
-    description: "Install the common module",
+    description: "Install the settings table",
     order: 1,
     version: "1.0.0",
-    down: (params?: Record<string, string>) => {
-        return db.schema
-            .dropTableIfExists("banners")
-            .dropTableIfExists("synonyms")
-            .dropTableIfExists("tags")
-            .dropTableIfExists("tagGroups")
-            .dropTableIfExists("settings")
-            .dropTableIfExists("links")
-            .dropTableIfExists("linkLists")
-            .dropTableIfExists("content")
-            .dropTableIfExists("media")
-            .dropTableIfExists("themes");
-    },
     parameters: [
         {name: "mediaBucket",   description: "The AWS bucket to use for media storage"},
         {name: "siteName",      description: "The name of the site"},
@@ -141,11 +128,44 @@ export const init:IMigration = {
         {name: "publicAppName", description: "The name of the public app"},
         {name: "imageHost",     description: "The hostname for the image server"},
     ],
-    up: (params) => {
-        console.log("---- RECEIVED PARAMS ----", params);
+    down: (params?: Record<string, string>) => {
         return db.schema
+            .dropTableIfExists("settings");
+    },
+    up: (params) => db.schema
+        .createTable("settings", settingsTable),
+    initData: async (params?: Record<string, string>) => {
+        await insertSettings(db, [
+            ...settings,
+            {key: "mediaBucket", value: params?.mediaBucket},
+            {key: "siteName", value: params?.siteName},
+            {key: "adminAppName", value: params?.adminAppName},
+            {key: "publicAppName", value: params?.publicAppName},
+            {key: "imageHost", value: params?.imageHost},
+        ]);
+    },
+}
 
-        .createTable("settings", settingsTable)
+export const init:IMigration = {
+    name: "init",
+    module: "common",
+    description: "Install the common module",
+    order: 3,
+    version: "1.0.0",
+    down: () => {
+        return db.schema
+            .dropTableIfExists("banners")
+            .dropTableIfExists("synonyms")
+            .dropTableIfExists("tags")
+            .dropTableIfExists("tagGroups")
+            .dropTableIfExists("links")
+            .dropTableIfExists("linkLists")
+            .dropTableIfExists("content")
+            .dropTableIfExists("media")
+            .dropTableIfExists("themes");
+    },
+    up: () => {
+        return db.schema
         .createTable("tagGroups", tagGroupsTable)
         .createTable("tags", tagsTable)
         .createTable("synonyms", synonymsTable)
@@ -156,12 +176,8 @@ export const init:IMigration = {
         .createTable("media", mediaTable)
         .createTable("themes", themesTable);
     },
-    initData: async (params?: Record<string, string>) => {
+    initData: async () => {
         await insertPermissions(db, permissions);
         await insertRolePermissions(db, rolePermissions);
-        await insertSettings(db, [
-            ...settings,
-            ...Object.entries(params || {}).map(([key, value]) => ({key, value})),
-        ]);
     },
 }
