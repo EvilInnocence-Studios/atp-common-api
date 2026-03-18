@@ -1,4 +1,4 @@
-import { ISetting } from "@common-shared/setting/types";
+import { ISetting } from "../../common-shared/setting/types";
 import { Knex } from "knex";
 
 export const insertSettings = async (db: Knex, settings: Partial<ISetting>[]): Promise<ISetting[]> =>
