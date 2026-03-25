@@ -68,7 +68,7 @@ export const contentTable = (table:Knex.TableBuilder) => {
     table.string("title");
     table.enum("type", ["page", "snippet"]).notNullable().defaultTo("page");
     table.text("content").notNullable().defaultTo("");
-    table.jsonb("layout").notNullable().defaultTo({});
+    table.jsonb("layout").nullable().defaultTo(null);
     table.enum("format", ["markdown", "layout"]).notNullable().defaultTo("markdown");
     table.boolean("enabled").notNullable().defaultTo(false);
     table.date("publishDate");
