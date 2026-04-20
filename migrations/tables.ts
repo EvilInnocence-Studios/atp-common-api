@@ -12,6 +12,7 @@ export const tagGroupsTable = (table:Knex.TableBuilder) => {
     table.boolean("filterable").notNullable().defaultTo(true);
     table.boolean("visible").notNullable().defaultTo(true);
     table.integer("order").notNullable().defaultTo(0);
+    table.string("type").nullable();
 }
 
 export const tagsTable = (table:Knex.TableBuilder) => {
@@ -66,7 +67,7 @@ export const contentTable = (table:Knex.TableBuilder) => {
     table.bigIncrements();
     table.string("slug").notNullable().unique();
     table.string("title");
-    table.enum("type", ["page", "snippet"]).notNullable().defaultTo("page");
+    table.enum("type", ["page", "post"]).notNullable().defaultTo("page");
     table.text("content").notNullable().defaultTo("");
     table.jsonb("layout").nullable().defaultTo(null);
     table.enum("format", ["markdown", "layout"]).notNullable().defaultTo("markdown");
