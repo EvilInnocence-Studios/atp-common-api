@@ -3,7 +3,7 @@ import { IMigration } from "../../../core/dbMigrations";
 import { insertPermissions, insertRolePermissions } from "../../../uac/migrations/util";
 import {
     bannersTable, contentTable, linkListsTable, linksTable, mediaTable, settingsTable,
-    synonymsTable, tagGroupsTable, tagsTable, themesTable,
+    synonymsTable, tagGroupsTable, tagsTable,
 } from "../tables";
 import { insertSettings } from "../util";
 
@@ -48,11 +48,6 @@ const permissions = [
     { name: "media.create",     description: "Can create media"           },
     { name: "media.delete",     description: "Can delete media"           },
 
-    { name: "theme.view",       description: "Can view themes"            },
-    { name: "theme.update",     description: "Can update themes"          },
-    { name: "theme.create",     description: "Can create themes"          },
-    { name: "theme.delete",     description: "Can delete themes"          },
-
     {name: "cache.clear",       description: "Can clear the cache"        },
 ];
 
@@ -89,10 +84,6 @@ const rolePermissions = [
     { roleName: "SuperUser", permissionName: "media.create" },
     { roleName: "SuperUser", permissionName: "media.delete" },
     { roleName: "SuperUser", permissionName: "cache.clear" },
-    { roleName: "SuperUser", permissionName: "theme.view" },
-    { roleName: "SuperUser", permissionName: "theme.update" },
-    { roleName: "SuperUser", permissionName: "theme.create" },
-    { roleName: "SuperUser", permissionName: "theme.delete" },
     { roleName: "Public", permissionName: "tag.view" },
     { roleName: "Public", permissionName: "synonym.view" },
     { roleName: "Public", permissionName: "banner.view" },
@@ -100,7 +91,6 @@ const rolePermissions = [
     { roleName: "Public", permissionName: "links.view" },
     { roleName: "Public", permissionName: "content.view" },
     { roleName: "Public", permissionName: "media.view" },
-    { roleName: "Public", permissionName: "theme.view" },
 ];
 
 const settings = [
@@ -112,7 +102,6 @@ const settings = [
     {key: "newAccountSubject", value: "New Account"},
     {key: "bannerImageFolder", value: "media/banner"},
     {key: "mediaImageFolder", value: "media/image"},
-    {key: "themeThumbnailFolder", value: "media/theme"},
 ]
 
 export const initSettings:IMigration = {
@@ -161,8 +150,7 @@ export const init:IMigration = {
             .dropTableIfExists("links")
             .dropTableIfExists("linkLists")
             .dropTableIfExists("content")
-            .dropTableIfExists("media")
-            .dropTableIfExists("themes");
+            .dropTableIfExists("media");
     },
     up: () => {
         return db.schema
@@ -173,8 +161,7 @@ export const init:IMigration = {
         .createTable("linkLists", linkListsTable)
         .createTable("links", linksTable)
         .createTable("content", contentTable)
-        .createTable("media", mediaTable)
-        .createTable("themes", themesTable);
+        .createTable("media", mediaTable);
     },
     initData: async () => {
         await insertPermissions(db, permissions);
