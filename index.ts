@@ -1,6 +1,6 @@
-import { init, initSettings } from "./migrations/00-init";
-import { addTagType } from "./migrations/01-addTagType";
-import { updateContentType } from "./migrations/02-updateContentType";
+import { init, initSettings } from "../common/migrations/00-init";
+import { addTagType } from "../common/migrations/01-addTagType";
+import { updateContentType } from "../common/migrations/02-updateContentType";
 
 export { apiConfig } from "./endpoints";
 
