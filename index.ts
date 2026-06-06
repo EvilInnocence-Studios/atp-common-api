@@ -1,4 +1,4 @@
-import { FieldRegistry } from "@core/express/util";
+import { FieldRegistry } from "../core/express/util";
 import { init, initSettings } from "../common/migrations/00-init";
 import { addTagType } from "../common/migrations/01-addTagType";
 import { updateContentType } from "../common/migrations/02-updateContentType";
