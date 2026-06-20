@@ -1,8 +1,4 @@
 import React from 'react';
-import { getAppConfig } from '../../../config';
-import { IOrder } from '../../store-shared/order/types';
-import { IProduct } from '../../store-shared/product/types';
-import { SafeUser } from '../../uac-shared/user/types';
 import { Index } from 'ts-functional/dist/types';
 
 export const ErrorReport = (props:Index<any>) => <>
