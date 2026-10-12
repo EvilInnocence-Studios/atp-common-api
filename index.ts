@@ -5,6 +5,7 @@ import { updateContentType } from "../common/migrations/02-updateContentType";
 import { addScheduledTasks } from "../common/migrations/03-addScheduledTasks";
 
 export { apiConfig } from "./endpoints";
+export { CacheService } from "./cache/service";
 export { ScheduledTaskRegistry, ScheduledTaskService, executeDueTasks, executeTask } from "./scheduledTask";
 
 export const migrations = [init, addTagType, updateContentType, addScheduledTasks];

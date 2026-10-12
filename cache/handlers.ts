@@ -1,42 +1,13 @@
-import { fromEnv } from "@aws-sdk/credential-providers";
 import { getParam } from "../../core/express/extractors";
 import { HandlerArgs } from "../../core/express/types";
 import { CheckPermissions } from "../../uac/permission/util";
-import { CloudFrontClient, CreateInvalidationCommand } from "@aws-sdk/client-cloudfront";
+import { CacheService } from "./service";
 
 class CacheHandlerClass {
     @CheckPermissions("cache.clear")
-    public async clear(...args:HandlerArgs<undefined>):Promise<any> {
-        const cacheType = getParam("cacheType")(args);
-        const DistributionId = process.env.CLOUDFRONT_DISTRIBUTION_ID;
-
-        const client = new CloudFrontClient({ region: process.env.AWS_REGION, credentials: fromEnv() });
-        const command = new CreateInvalidationCommand({
-            DistributionId,
-            InvalidationBatch: {
-                CallerReference: `${Date.now()}`,
-                Paths: cacheType !== "all" ? {
-                    Quantity: 2,
-                    Items: [
-                        `/${cacheType}`,
-                        `/${cacheType}*`,
-                    ]
-                } : {
-                    Quantity: 1,
-                    Items: [
-                        "/*",
-                    ]
-                }
-            }
-        });
-
-        try {
-            const response = await client.send(command);
-            return response;
-        } catch (error) {
-            console.error("Error invalidating cache:", error);
-            throw error;
-        }
+    public async clear(...args: HandlerArgs<undefined>): Promise<any> {
+        const cacheType = getParam<string>("cacheType")(args);
+        return CacheService.clear(cacheType);
     }
 }
 
