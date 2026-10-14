@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { secret } from "../../../config";
+import { secret } from "../../core/config";
 import { error403 } from "../../core/express/errors";
 import { getBody, getHeader, getParam, getQuery } from "../../core/express/extractors";
 import { HandlerArgs } from "../../core/express/types";
